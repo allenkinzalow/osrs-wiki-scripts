@@ -7,3 +7,4 @@ console.log(`Running ${config.environment}`);
 
 //differences();
 infoboxGenerator("item_defs");
+infoboxGenerator("npc_defs");

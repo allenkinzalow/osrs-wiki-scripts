@@ -27,7 +27,7 @@ type InfoboxItem = {
   examine: string;
   value: number;
   alchable?: boolean;
-  weight: number;
+  weight: string;
   respawn?: number;
   exchange?: boolean;
   gemwname?: string;

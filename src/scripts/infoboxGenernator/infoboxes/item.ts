@@ -35,7 +35,7 @@ const itemInfoboxGenerator = async (id: string) => {
       options: itemJson.interfaceOptions,
       examine: "",
       value: itemJson.cost,
-      weight: itemJson.weight / 1000,
+      weight: (itemJson.weight / 1000).toFixed(3),
       id: itemJson.id,
     });
 
