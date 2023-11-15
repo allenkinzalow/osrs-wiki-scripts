@@ -25,7 +25,7 @@ class InfoboxTemplate<T> extends Template {
         parsedValue = value.build();
       } else if (Array.isArray(value)) {
         parsedValue = value.filter((v) => v && v !== null).join(", ");
-      } else {
+      } else if (value) {
         parsedValue = `${value}`;
       }
       infoboxTemplate.add(key, parsedValue);

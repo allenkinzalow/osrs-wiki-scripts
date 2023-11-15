@@ -6,4 +6,4 @@ import infoboxGenerator from "./scripts/infoboxGenernator";
 console.log(`Running ${config.environment}`);
 
 //differences();
-infoboxGenerator("item", "4151");
+infoboxGenerator("item_defs");

@@ -27,7 +27,8 @@ const itemInfoboxGenerator = async (id: string) => {
       quest: "No",
       tradeable: itemJson.isTradeable,
       bankable: itemJson.placeholderId > 0,
-      placeholder: itemJson.placeholderId,
+      placeholder:
+        itemJson.placeholderId > 1 ? itemJson.placeholderId : undefined,
       equipable: itemJson["wearPos1"] > 0,
       stackable: itemJson.stackable > 0,
       noteable: itemJson.notedId > 0,
