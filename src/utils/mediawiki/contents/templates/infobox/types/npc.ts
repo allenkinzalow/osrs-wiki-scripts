@@ -6,7 +6,7 @@ type InfoboxNpc = {
   name: string;
   image: MediaWikiFile;
   release: MediaWikiDate | "";
-  update: MediaWikiLink | "";
+  update: string;
   removal?: MediaWikiDate;
   removalupdate?: MediaWikiDate;
   aka?: string;
@@ -18,6 +18,7 @@ type InfoboxNpc = {
   shop?: MediaWikiLink;
   gender?: string;
   options?: string[];
+  map: string;
   examine: string;
   id: string;
   trailblazerRegion?: string;

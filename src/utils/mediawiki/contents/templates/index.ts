@@ -1,4 +1,5 @@
 export { default as CollapedSectionTemplate } from "./collapsedSection";
+export { default as ClueInfoTemplate } from "./clueInfo";
 export { default as InfoboxTemplate } from "./infobox";
 export { default as LetterTemplate } from "./letter";
 export { default as ListenTemplate } from "./listen";

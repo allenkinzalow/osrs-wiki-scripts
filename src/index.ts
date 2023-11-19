@@ -1,10 +1,10 @@
 import config from "@config";
 
-import differences from "./scripts/difference/difference";
-import infoboxGenerator from "./scripts/infoboxGenernator";
+import generateCluePages from "./scripts/clues";
 
 console.log(`Running ${config.environment}`);
 
 //differences();
-infoboxGenerator("item_defs");
-infoboxGenerator("npc_defs");
+//infoboxGenerator("item_defs");
+//infoboxGenerator("npc_defs");
+generateCluePages();

@@ -21,12 +21,16 @@ const npcInfoboxGenerator = async (id: string) => {
 
     const infoboxNpc = new InfoboxTemplate<InfoboxNPC>("NPC", {
       name: npcJson.name as string,
-      image: new MediaWikiFile(`${npcJson.name}.png`),
+      image: new MediaWikiFile(`${npcJson.name}.png`, {
+        resizing: { width: 130 },
+      }),
       release: new MediaWikiDate(new Date()),
-      update: "",
-      members: npcJson.members as boolean,
+      update: "Leagues IV - Trailblazer Reloaded",
+      members: true,
+      level: npcJson.combatLevel,
       quest: "No",
       options: npcJson.actions,
+      map: "No",
       examine: "",
       id: npcJson.id,
     });
@@ -39,6 +43,8 @@ const npcInfoboxGenerator = async (id: string) => {
         horizontalAlignment: "left",
       }),
       new MediaWikiBreak(),
+      new MediaWikiBreak(),
+      new MediaWikiTemplate("Trailblazer Reloaded League"),
     ]);
 
     await mkdir("./out/infobox/npc", { recursive: true });
