@@ -52,6 +52,7 @@ export type CluePageBuilderProps = {
   answers?: Answer[];
   challenge?: Challenge;
   clue: string;
+  emotes?: number[];
   id: string;
   item?: Item;
   itemName: string;
@@ -66,6 +67,7 @@ const cluePageBuilder = ({
   answers,
   clue,
   challenge,
+  emotes,
   id,
   item,
   itemName,
@@ -113,12 +115,14 @@ const cluePageBuilder = ({
       id,
       getDirections(type, answers?.[0].type, clue),
       wieldedItems ? wieldedItems.map((items) => items.answer).join(", ") : "",
-      formatAnswers(answers) +
+      formatAnswers(answers, emotes) +
         (requirements?.length > 0
           ? `\nRequires: ${requirements.join(", ")}`
           : "") +
         (challenge
-          ? `\nThe clue has an additional challenge:\n\nQuestion: ''${challenge.task}''\n\nAnswer: '''${challenge.answer}'''`
+          ? `\nThe clue has an additional challenge:${
+              challenge.task ? "\n\n" + challenge.task : ""
+            }${challenge.answer ? "\n\n" : ""}${challenge.answer}`
           : ""),
       _.flatten(
         answers.map((answer) => answer.worldLocs),

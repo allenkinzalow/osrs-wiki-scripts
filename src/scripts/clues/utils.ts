@@ -77,7 +77,8 @@ export const getWorldPoint = (val: number) => [
 
 export const getAnswer = async (
   cache: Promise<CacheProvider>,
-  answerIds: (string | number | bigint)[]
+  answerIds: (string | number | bigint)[],
+  typeOverride?: string
 ): Promise<Answer[]> => {
   if (answerIds) {
     const answersPromises = answerIds.map(async (value) => {
@@ -117,7 +118,7 @@ export const getAnswer = async (
       return {
         answer,
         entityName,
-        type,
+        type: typeOverride ?? type,
         worldLocs: coords.map((coord) => getWorldPoint(coord)),
       };
     });
@@ -127,27 +128,47 @@ export const getAnswer = async (
   return [];
 };
 
-export const formatAnswers = (answers: Answer[]): string => {
+export const formatAnswers = (answers: Answer[], emotes?: number[]): string => {
   const answer = answers.reduce<string>((total, answer) => {
     const answerString = answer.answer as string;
-    return (
-      total +
-      (answer.type == "npc"
-        ? !answerString.startsWith("Speak")
-          ? `Speak to [[${answer.entityName}]] ${lowerCaseFirst(answerString)}`
-          : answerString
-        : answer.type == "object"
-        ? !answerString.startsWith("Search")
-          ? `Search the ${answer.entityName.toLowerCase()} near ${lowerCaseFirst(
-              answerString
-            )}`
-          : answerString
-        : answer.type == "map"
-        ? `Dig near ${lowerCaseFirst(answer.answer as string)}`
-        : answer.answer)
-    );
+    let formattedAnswer;
+    if (answer.type == "npc" && !answerString.startsWith("Speak")) {
+      formattedAnswer = `Speak to [[${answer.entityName}]] ${lowerCaseFirst(
+        answerString
+      )}`;
+    } else if (answer.type == "object" && !answerString.startsWith("Search")) {
+      formattedAnswer = `Search the ${answer.entityName.toLowerCase()} near ${lowerCaseFirst(
+        answerString
+      )}`;
+    } else if (answer.type == "map") {
+      formattedAnswer = `Dig ${formatMapAnswer(answerString)}`;
+    } else if (answer.type == "emote") {
+      formattedAnswer = `Perform the ${
+        emotes?.length > 0
+          ? emotes.map((emote) => `[[${getEmotePage(emote)}]]`).join(" and ") +
+            `${emotes.length > 1 ? " emotes" : " emote"}`
+          : "emote"
+      } near ${lowerCaseFirst(answerString)}`;
+    } else {
+      formattedAnswer = answer.answer;
+    }
+    return total + formattedAnswer;
   }, "");
   return answer;
+};
+
+export const formatMapAnswer = (answer: string) => {
+  let result = answer.replaceAll("fairy ring", "[[fairy ring]]");
+
+  const fairyCode = answer.match(/\([A-Z]+\)/g)?.[0];
+  if (fairyCode) {
+    result = result.replaceAll(
+      fairyCode,
+      `{{Fairycode|${fairyCode.replace(/[\(\)]+/g, "")}}}`
+    );
+  }
+
+  return lowerCaseFirst(result);
 };
 
 export const getChallenge = async (
@@ -159,15 +180,18 @@ export const getChallenge = async (
   if (challengeId) {
     const challengeRow = await DBRow.load(cache, challengeId);
     if (challengeRow.table === 25) {
-      challenge = challengeRow.values[0][0] as string;
-      challengeAnswer = challengeRow.values[0][1] as number;
+      // Question & answer
+      challenge = `Question: ''${challengeRow.values[0][0] as string}''`;
+      challengeAnswer = `Answer: '''${challengeRow.values[0][1] as number}'''`;
     } else if (challengeRow.table === 26) {
+      // Puzzle/light box
       challenge = challengeRow.values[0][0];
     } else if (challengeRow.table === 27) {
-      challenge = challengeRow.values[0][0];
+      // Kill an npc
+      //challenge = challengeRow.values[0][0];
       const npc = await getNpc(cache, challengeRow.values[1][0] as number);
       if (npc) {
-        challengeAnswer = `[[${npc.name}]]`;
+        challengeAnswer = `Kill ${vowel(npc.name)} [[${npc.name}]].`;
       }
     }
   }
@@ -263,6 +287,37 @@ export const getWieldedItems = async (
 
 export const getTblRegions = (values: (string | number | bigint)[]) =>
   values?.map((region) => getTblRegion(region)).join(",");
+
+const emotes: { [key: number]: string } = {
+  1: "no",
+  2: "bow",
+  3: "angry",
+  4: "think",
+  5: "wave",
+  6: "shrug",
+  8: "beckon",
+  7: "cheer",
+  9: "laugh",
+  10: "jump for joy",
+  11: "yawn",
+  12: "dance",
+  13: "jig",
+  14: "spin",
+  15: "headbang",
+  16: "cry",
+  17: "blow kiss",
+  18: "panic",
+  19: "raspberry",
+  20: "clap",
+  21: "salute",
+  23: "goblin salute",
+  30: "flap",
+  31: "slap head",
+};
+
+export const getEmotePage = (emote: number): string => {
+  return emotes[emote];
+};
 
 export const lowerCaseFirst = (value: string) =>
   value.charAt(0).toLowerCase() + value.slice(1);

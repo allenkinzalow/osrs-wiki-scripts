@@ -14,10 +14,11 @@ import {
   getRequirements,
   getTblRegions,
   getTier,
+  getWieldedItems,
 } from "../utils";
 
-const generateCoordinatePages = async (cache: Promise<FlatCacheProvider>) => {
-  const rows = await DBTable.loadRows(cache, 7);
+const generateEmotePages = async (cache: Promise<FlatCacheProvider>) => {
+  const rows = await DBTable.loadRows(cache, 9);
 
   const items = await Item.all(cache);
   const paramMap: { [key: string | number]: Item } = {};
@@ -44,20 +45,26 @@ const generateCoordinatePages = async (cache: Promise<FlatCacheProvider>) => {
         id,
         tier,
         clue,
-        answers: await getAnswer(cache, values[3]),
-        requirements: await getRequirements(cache, values[4]),
-        challenge: await getChallenge(cache, values[5]?.[0]),
-        tblRegions: getTblRegions(values[6]),
+        answers: await getAnswer(cache, values[3], "emote"),
+        emotes: values[4].map((val) => val as number),
+        requirements: await getRequirements(cache, values[10]),
+        challenge: await getChallenge(cache, values[9]?.[0]),
+        tblRegions: getTblRegions(values[11]),
+        wieldedItems: await getWieldedItems(cache, values[6]),
         itemName,
         item,
-        type: "coordinate",
+        type: "emote",
       });
+      const truncatedClue = clue.split(".")?.[0];
 
-      const dir = `./out/clues/coordinates`;
+      const dir = `./out/clues/emotes`;
       await mkdir(dir, { recursive: true });
-      await writeFile(`${dir}/${itemName} - ${clue}.txt`, builder.build());
+      await writeFile(
+        `${dir}/${itemName} - ${truncatedClue}.txt`,
+        builder.build()
+      );
     }
   });
 };
 
-export default generateCoordinatePages;
+export default generateEmotePages;

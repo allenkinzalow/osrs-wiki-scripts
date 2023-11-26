@@ -5,6 +5,8 @@ import {
   generateCipherPages,
   generateCoordinatePages,
   generateCrypticPages,
+  generateEmotePages,
+  generateFairyCrypticPages,
   generateMapPages,
 } from "./types";
 import { getCacheProvider } from "./utils";
@@ -28,8 +30,10 @@ const generateCluePages = async () => {
   generateAnagramPages(cache);
   generateMapPages(cache);
   generateCipherPages(cache);
+  generateFairyCrypticPages(cache);
   generateCoordinatePages(cache);
   generateCrypticPages(cache);
+  generateEmotePages(cache);
 };
 
 export default generateCluePages;
