@@ -93,7 +93,7 @@ const cluePageBuilder = ({
       examine: item ? ITEM_EXAMINES[item.id] : "",
       value: item?.price,
       weight: `${item?.weight ? (item.weight / 1000).toFixed(3) : ""}`,
-      trailblazerRegion: tblRegions,
+      //trailblazerRegion: tblRegions,
       id: `${item?.id}`,
     }).build(),
     new MediaWikiFile(`${itemName} detail.png`, {

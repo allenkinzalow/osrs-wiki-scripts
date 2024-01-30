@@ -20,6 +20,20 @@ export const getCacheProvider = async () => {
     },
   });
 };
+export const getCacheProviderGithub = async () => {
+  return new FlatCacheProvider({
+    async getFile(name) {
+      const req = await fetch(
+        `https://raw.githubusercontent.com/abextm/osrs-cache/master/${name}`
+      );
+      if (!req.ok) {
+        return;
+      }
+      const ab = await req.arrayBuffer();
+      return new Uint8Array(ab);
+    },
+  });
+};
 
 export const getTier = (id: any) => {
   const idString = `${id}`;

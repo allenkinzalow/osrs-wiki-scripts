@@ -8,7 +8,7 @@ const infoboxGenerator = async (type: string, id?: string) => {
     if (id) {
       itemInfoboxGenerator(id);
     } else {
-      const newItems = await readdir(`./out/added/item_defs`);
+      const newItems = await readdir(`./out/differences/added/item_defs`);
       newItems.forEach((file) => {
         itemInfoboxGenerator(file.split(".")[0]);
       });
@@ -17,7 +17,7 @@ const infoboxGenerator = async (type: string, id?: string) => {
     if (id) {
       npcInfoboxGenerator(id);
     } else {
-      const newItems = await readdir(`./out/added/npc_defs`);
+      const newItems = await readdir(`./out/differences/added/npc_defs`);
       newItems.forEach((file) => {
         npcInfoboxGenerator(file.split(".")[0]);
       });

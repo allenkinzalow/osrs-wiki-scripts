@@ -7,10 +7,10 @@ import { getJsonDifference, getStringDifference } from "./difference.utils";
 const OLD_DUMP = "./data/olddump";
 const NEW_DUMP = "./data/newdump";
 
-const EXCLUDED_DIRS = ["object_defs", "binary"];
+const EXCLUDED_DIRS = ["object_defs", "binary", "interface_defs"];
 
 const differences = async () => {
-  /*const directories = await readdir(OLD_DUMP);
+  const directories = await readdir(OLD_DUMP);
 
   const queue = [];
   directories.forEach(async (directory) => {
@@ -23,9 +23,6 @@ const differences = async () => {
       queue.push(directory);
     }
   });
-
-  console.log(queue.length);*/
-  directoryDifference("object_defs");
 };
 
 const directoryDifference = async (directory: string) => {
@@ -163,7 +160,7 @@ const writeFileDiff = async (
   path: string,
   data: string | Buffer
 ) => {
-  const fullPath = `./out/${type}/${path}`;
+  const fullPath = `./out/differences/${type}/${path}`;
 
   await mkdir(dirname(fullPath), { recursive: true });
 

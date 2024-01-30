@@ -25,7 +25,7 @@ const npcInfoboxGenerator = async (id: string) => {
         resizing: { width: 130 },
       }),
       release: new MediaWikiDate(new Date()),
-      update: "Leagues IV - Trailblazer Reloaded",
+      update: "",
       members: true,
       level: npcJson.combatLevel,
       quest: "No",
@@ -43,8 +43,6 @@ const npcInfoboxGenerator = async (id: string) => {
         horizontalAlignment: "left",
       }),
       new MediaWikiBreak(),
-      new MediaWikiBreak(),
-      new MediaWikiTemplate("Trailblazer Reloaded League"),
     ]);
 
     await mkdir("./out/infobox/npc", { recursive: true });
